@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyain8nqnshl2"]
+
+[ext_resource type="Script" uid="uid://2vjegwf58ao6" path="res://Scripts/title_screen.gd" id="1_klylv"]
+
+[node name="Title Screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_klylv")
+
+[node name="Start Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 540.0
+offset_right = 1026.0
+offset_bottom = 618.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "Start Game"
+
+[node name="Rules Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 740.0
+offset_right = 1026.0
+offset_bottom = 818.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "How to Play"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+modulate = Color(0.890196, 0.486275, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -340.0
+offset_right = 74.0
+offset_bottom = -286.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(6, 6)
+pivot_offset = Vector2(87, 27)
+mouse_filter = 2
+text = "MEOW MAO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Start Button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Rules Button" to="." method="_on_rules_button_pressed"]

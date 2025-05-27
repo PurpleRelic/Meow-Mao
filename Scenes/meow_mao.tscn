@@ -1,0 +1,319 @@
+[gd_scene load_steps=20 format=3 uid="uid://cfhsjdh6sutxm"]
+
+[ext_resource type="Script" uid="uid://b7t87qocnvq7t" path="res://Scripts/input_manager.gd" id="1_dq5it"]
+[ext_resource type="Script" uid="uid://c5843e75yi2pe" path="res://Scripts/card_manager.gd" id="1_j6hpg"]
+[ext_resource type="PackedScene" uid="uid://h578lk5v4kp1" path="res://Scenes/CardSlot.tscn" id="2_goakc"]
+[ext_resource type="Script" uid="uid://dtw2ifu24ypm8" path="res://Scripts/card_slot.gd" id="3_iy4xx"]
+[ext_resource type="Script" uid="uid://dqfhe7wgsarcn" path="res://Scripts/player_hand.gd" id="4_dq5it"]
+[ext_resource type="Script" uid="uid://bxnkdq0n55x1n" path="res://Scripts/opponent_hand.gd" id="6_el5vi"]
+[ext_resource type="Script" uid="uid://furudrdcn6g0" path="res://Scripts/deck.gd" id="6_fsupx"]
+[ext_resource type="Texture2D" uid="uid://bbsk1pymuiyjn" path="res://Images/Card Back.png" id="7_pwpxm"]
+[ext_resource type="Texture2D" uid="uid://dlvsf8flo6m1m" path="res://Images/Timer Background.png" id="8_pwpxm"]
+[ext_resource type="Script" uid="uid://b0j37nx37vj6y" path="res://Scripts/timer.gd" id="8_uhhh2"]
+[ext_resource type="Texture2D" uid="uid://hv8adwrc5onh" path="res://Images/Timer Foreground.png" id="10_uhhh2"]
+[ext_resource type="Script" uid="uid://68ax108jrfr8" path="res://Scripts/opponent_ai.gd" id="11_oaasd"]
+[ext_resource type="Script" uid="uid://dhfox1dwii2rw" path="res://Scripts/rule_manager.gd" id="13_4bt6l"]
+[ext_resource type="Script" uid="uid://hgtaxte04llj" path="res://Scenes/round_manager.gd" id="15_c4jys"]
+[ext_resource type="Texture2D" uid="uid://cts317uv0pc25" path="res://Images/Point Chip.png" id="16_4me7m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhhh2"]
+size = Vector2(170, 251)
+
+[sub_resource type="Animation" id="Animation_jwydy"]
+resource_name = "Final Winner"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Winner:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(0.0156863, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Winner:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(400, 500), Vector2(850, 500)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Winner:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(3, 3), Vector2(9, 9)]
+}
+
+[sub_resource type="Animation" id="Animation_c4jys"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Winner:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Winner:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(400, 500)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Winner:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, 3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4me7m"]
+_data = {
+&"Final Winner": SubResource("Animation_jwydy"),
+&"RESET": SubResource("Animation_c4jys")
+}
+
+[node name="Meow Mao" type="Node2D"]
+
+[node name="Input Manager" type="Node2D" parent="."]
+script = ExtResource("1_dq5it")
+
+[node name="Card Manager" type="Node2D" parent="."]
+script = ExtResource("1_j6hpg")
+
+[node name="Card Slot" parent="." instance=ExtResource("2_goakc")]
+position = Vector2(960, 540)
+script = ExtResource("3_iy4xx")
+
+[node name="Player Hand" type="Node2D" parent="."]
+script = ExtResource("4_dq5it")
+
+[node name="Opponent Hand" type="Node2D" parent="."]
+script = ExtResource("6_el5vi")
+
+[node name="Deck" type="Node2D" parent="."]
+z_index = -2
+position = Vector2(1160, 540)
+script = ExtResource("6_fsupx")
+
+[node name="Sprite2D" type="Sprite2D" parent="Deck"]
+scale = Vector2(0.34, 0.34)
+texture = ExtResource("7_pwpxm")
+
+[node name="Area2D" type="Area2D" parent="Deck"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deck/Area2D"]
+position = Vector2(1, 1.5)
+shape = SubResource("RectangleShape2D_uhhh2")
+
+[node name="Cards Left" type="RichTextLabel" parent="Deck"]
+modulate = Color(0, 0, 0, 1)
+z_index = -2
+offset_left = -119.0
+offset_top = -200.0
+offset_right = 42.0
+offset_bottom = -153.0
+scale = Vector2(1.5, 1.5)
+mouse_filter = 2
+text = "Cards Left: 0"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Timer Manager" type="Node2D" parent="."]
+position = Vector2(512, 540)
+script = ExtResource("8_uhhh2")
+
+[node name="Player Timer" type="Node2D" parent="Timer Manager"]
+position = Vector2(0, 200)
+
+[node name="Timer Background" type="Sprite2D" parent="Timer Manager/Player Timer"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_pwpxm")
+
+[node name="Timer Foreground" type="Sprite2D" parent="Timer Manager/Player Timer"]
+z_index = 1
+position = Vector2(-214, -249)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_uhhh2")
+centered = false
+
+[node name="Time Left" type="RichTextLabel" parent="Timer Manager/Player Timer"]
+z_index = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -71.0
+offset_right = -73.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 3)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+text = "5.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Opponent Timer" type="Node2D" parent="Timer Manager"]
+position = Vector2(0, -200)
+
+[node name="Timer Background" type="Sprite2D" parent="Timer Manager/Opponent Timer"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_pwpxm")
+
+[node name="Timer Foreground" type="Sprite2D" parent="Timer Manager/Opponent Timer"]
+z_index = 1
+position = Vector2(-214, -249)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_uhhh2")
+centered = false
+
+[node name="Time Left" type="RichTextLabel" parent="Timer Manager/Opponent Timer"]
+z_index = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -71.0
+offset_right = -73.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 3)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+text = "5.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Opponent AI" type="Node" parent="."]
+script = ExtResource("11_oaasd")
+
+[node name="Turn Timer" type="Timer" parent="Opponent AI"]
+
+[node name="Play Timer" type="Timer" parent="Opponent AI"]
+
+[node name="Rule Manager" type="Node2D" parent="."]
+position = Vector2(1351, 308)
+script = ExtResource("13_4bt6l")
+
+[node name="Rules Text" type="RichTextLabel" parent="Rule Manager"]
+offset_top = -216.0
+offset_right = 265.0
+offset_bottom = 241.0
+scale = Vector2(2, 2)
+mouse_filter = 2
+bbcode_enabled = true
+text = "Rules:
+
+No playing two of same suit in a row
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Round Manager" type="Node2D" parent="."]
+script = ExtResource("15_c4jys")
+
+[node name="OPoint Chip1" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(200, 100)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="OPoint Chip2" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(350, 100)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="OPoint Chip3" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(500, 100)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="PPoint Chip1" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(200, 980)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="PPoint Chip2" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(350, 980)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="PPoint Chip3" type="Sprite2D" parent="Round Manager"]
+visible = false
+position = Vector2(500, 980)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_4me7m")
+
+[node name="Winner" type="RichTextLabel" parent="Round Manager"]
+modulate = Color(1, 1, 1, 0)
+z_index = 5
+offset_left = 400.0
+offset_top = 500.0
+offset_right = 600.0
+offset_bottom = 580.0
+scale = Vector2(3, 3)
+pivot_offset = Vector2(100, 40)
+text = "FAILED!!!!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Round Manager"]
+libraries = {
+&"": SubResource("AnimationLibrary_4me7m")
+}
+
+[node name="Button" type="Button" parent="Round Manager"]
+visible = false
+offset_left = 891.0
+offset_top = 741.0
+offset_right = 1011.0
+offset_bottom = 789.0
+scale = Vector2(3, 3)
+pivot_offset = Vector2(60, 24)
+disabled = true
+text = "Next Round"

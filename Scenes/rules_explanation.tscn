@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://8tjgi4efv8cq"]
+
+[ext_resource type="Script" uid="uid://c8cxbr1cxicb" path="res://Scripts/rules_explanation.gd" id="1_io87e"]
+
+[node name="Rules Explanation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_io87e")
+
+[node name="Rules Text" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -320.0
+offset_right = 400.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+pivot_offset = Vector2(400, 214)
+mouse_filter = 2
+text = "RULES
+
+Meow Mao follows a two-player game similar to Mao. In this game you and your opponent are dealt a hand of 5 cards, drawing another whenever one is played
+
+On your turn, you must play a card that follows the current rule listed on the right. Then, your opponent will do the same, back and forth. For the first play, any card is legal.
+
+Play continues this way until either you or your opponent play a card that breaks a rule or take a collective 10 seconds on your turn, causing the other player to win the round.
+
+The winner gains a point, and can then choose a new rule to be added in addition to all previous rules. After a player has amassed 3 points, they are the grand winner!
+
+The opponent might play the wrong card, and gets worse the longer a round lasts. Keep it up!
+
+Good luck!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 1025.0
+offset_right = 1026.0
+offset_bottom = 1103.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "Return to Title"
+
+[connection signal="pressed" from="Title Button" to="." method="_on_title_button_pressed"]

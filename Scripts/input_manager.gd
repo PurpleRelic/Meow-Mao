@@ -1,0 +1,55 @@
+extends Node2D
+
+signal left_mouse_clicked
+signal left_mouse_released
+
+const COLLISION_MASK_CARD = 1
+const COLLISION_MASK_DECK = 4
+
+var card_manager_reference
+var deck_reference
+var opponent_turn = false
+var time_up = false
+
+func _ready() -> void:
+	card_manager_reference = $"../Card Manager"
+	deck_reference = $"../Deck"
+
+func turn_pass():
+	opponent_turn = !opponent_turn
+
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			emit_signal("left_mouse_clicked")
+			raycast_at_cursor()
+		else:
+			emit_signal("left_mouse_released")
+
+func raycast_at_cursor():
+	if opponent_turn or time_up:
+		return
+	var space_state = get_world_2d().direct_space_state
+	var parameters = PhysicsPointQueryParameters2D.new()
+	parameters.position = get_global_mouse_position()
+	parameters.collide_with_areas = true
+	var result = space_state.intersect_point(parameters)
+	if result.size() > 0:
+		var highest_card = null
+		var found_deck = false
+		for i in range(result.size()):
+			var result_collision_mask = result[i].collider.collision_mask
+			if result_collision_mask == COLLISION_MASK_CARD:
+				# Card clicked
+				var card_found = result[i].collider.get_parent()
+				if card_found and !card_found.in_opponent:
+					if not highest_card or (card_found.z_index > highest_card.z_index):
+						highest_card = card_found
+			elif result_collision_mask == COLLISION_MASK_DECK:
+				# Deck clicked
+				found_deck = true
+		if found_deck:
+			deck_reference.reset_hand("Player")
+		elif highest_card:
+			card_manager_reference.start_drag(highest_card)
+			
