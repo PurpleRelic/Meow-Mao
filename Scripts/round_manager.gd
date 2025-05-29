@@ -3,6 +3,9 @@ extends Node2D
 var playerpoints = 0
 var opponentpoints = 0
 
+func _ready() -> void:
+	Global.round_manager = self
+
 func endround(winner):
 	if winner == "Player":
 		playerpoints += 1
@@ -30,7 +33,7 @@ func endround(winner):
 				$"OPoint Chip3".visible = true
 			_:
 				print("Opponent exceeded 3 points")
-	$"../Timer Manager".round_over()
+	Global.round_status = 2
 	if playerpoints >= 3 or opponentpoints >= 3:
 		if playerpoints >= 3:
 			$Winner.text = "TOTAL WINNER IS: PLAYER"
@@ -48,6 +51,8 @@ func newround():
 	$Button.visible = false
 	$Button.disabled = true
 	$Winner.modulate = Color(255,255,255,0)
-	$"../Opponent AI".fail_chance = 0.05
-	$"../Rule Manager".add_rule()
-	$"../Timer Manager".reset_timers()
+	Global.opponent_ai.fail_chance = 0.0
+	Global.opponent.base_turn_speed += (0.5 / Global.difficulty)
+	Global.rule_manager.add_rule()
+	Global.timer_manager.reset_timers()
+	Global.round_status = 0

@@ -6,17 +6,8 @@ signal left_mouse_released
 const COLLISION_MASK_CARD = 1
 const COLLISION_MASK_DECK = 4
 
-var card_manager_reference
-var deck_reference
-var opponent_turn = false
-var time_up = false
-
 func _ready() -> void:
-	card_manager_reference = $"../Card Manager"
-	deck_reference = $"../Deck"
-
-func turn_pass():
-	opponent_turn = !opponent_turn
+	Global.input_manager = self
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -27,7 +18,7 @@ func _input(event):
 			emit_signal("left_mouse_released")
 
 func raycast_at_cursor():
-	if opponent_turn or time_up:
+	if Global.turn == "Opponent" or Global.round_status == 2:
 		return
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
@@ -49,7 +40,7 @@ func raycast_at_cursor():
 				# Deck clicked
 				found_deck = true
 		if found_deck:
-			deck_reference.reset_hand("Player")
+			Global.deck.reset_hand("Player")
 		elif highest_card:
-			card_manager_reference.start_drag(highest_card)
+			Global.card_manager.start_drag(highest_card)
 			

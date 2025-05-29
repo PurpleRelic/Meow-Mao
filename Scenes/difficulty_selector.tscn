@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://8j5se002cirx"]
+
+[ext_resource type="Script" uid="uid://ihpl1106gmyu" path="res://Scripts/difficulty_selector.gd" id="1_k5d56"]
+
+[node name="Difficulty Selector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k5d56")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = -64.0
+offset_top = -35.0
+offset_right = 279.0
+offset_bottom = 37.0
+scale = Vector2(6, 6)
+text = "Select your difficulty:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Easy" type="Button" parent="."]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 600.0
+offset_right = 526.0
+offset_bottom = 678.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "Easy"
+
+[node name="Medium" type="Button" parent="."]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 600.0
+offset_right = 1026.0
+offset_bottom = 678.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "Medium"
+
+[node name="Hard" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1360.0
+offset_top = 600.0
+offset_right = 1526.0
+offset_bottom = 678.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(83, 39)
+text = "Hard"
+
+[connection signal="pressed" from="Easy" to="." method="_on_easy_pressed"]
+[connection signal="pressed" from="Medium" to="." method="_on_medium_pressed"]
+[connection signal="pressed" from="Hard" to="." method="_on_hard_pressed"]

@@ -12,6 +12,7 @@ var num_rules = 0
 
 func _ready() -> void:
 	add_rule()
+	Global.rule_manager = self
 
 func add_rule():
 	if rules_active.size() == num_rules:
