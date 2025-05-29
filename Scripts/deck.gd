@@ -8,14 +8,11 @@ var deck = ["AH","2H","3H","4H","5H","6H","7H","8H","9H","10H","JH","QH","KH",
 					"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC",
 					"AS","2S","3S","4S","5S","6S","7S","8S","9S","10S","JS","QS","KS"]
 var card_database_reference
-var player_hand_reference
-var opponent_hand_reference
 
 func _ready() -> void:
 	$"Cards Left".text = str("Cards Left: " + str(deck.size()) + "\nClick to Reset Hand")
-	player_hand_reference = $"../Player Hand"
-	opponent_hand_reference = $"../Opponent Hand"
 	card_database_reference = preload("res://Scripts/card_database.gd")
+	Global.deck = self
 	deck.shuffle()
 	for i in range(5):
 		draw_card("Player")
@@ -23,9 +20,9 @@ func _ready() -> void:
 
 func reset_hand(turn):
 	if turn == "Player":
-		player_hand_reference.remove_hand()
+		Global.player_hand.remove_hand()
 	else:
-		opponent_hand_reference.remove_hand()
+		Global.opponent_hand.remove_hand()
 	for i in range(5):
 		draw_card(turn)
 
@@ -34,8 +31,8 @@ func reset_deck():
 					"AD","2D","3D","4D","5D","6D","7D","8D","9D","10D","JD","QD","KD",
 					"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC",
 					"AS","2S","3S","4S","5S","6S","7S","8S","9S","10S","JS","QS","KS"]
-	#for i in range(player_hand_reference.player_hand.size()):
-	#	deck.erase(player_hand_reference.player_hand[i])
+	#for i in range(Global.player_hand.player_hand.size()):
+	#	deck.erase(Global.player_hand.player_hand[i])
 	deck.shuffle()
 	$"Cards Left".text = str("Cards Left: " + str(deck.size()) + "\nClick to Reset Hand")
 	$Sprite2D.texture = load("res://Images/Card Back.png")
@@ -54,13 +51,13 @@ func draw_card(turn):
 	var card_scene = preload(CARD_PATH)
 	var new_card = card_scene.instantiate()
 	new_card.position = self.position
-	$"../Card Manager".add_child(new_card)
-	$"../Card Manager".change_card_rank(new_card,card_database_reference.CARDS[card_drawn][0])
-	$"../Card Manager".change_card_suit(new_card,card_database_reference.CARDS[card_drawn][1])
+	Global.card_manager.add_child(new_card)
+	Global.card_manager.change_card_rank(new_card,card_database_reference.CARDS[card_drawn][0])
+	Global.card_manager.change_card_suit(new_card,card_database_reference.CARDS[card_drawn][1])
 	new_card.name = "Card"
 	if turn == "Player":
-		player_hand_reference.add_card_to_hand(new_card,DEFAULT_DRAW_SPEED)
+		Global.player_hand.add_card_to_hand(new_card,DEFAULT_DRAW_SPEED)
 		new_card.get_node("AnimationPlayer").play("Card Flip")
 	else:
-		opponent_hand_reference.add_card_to_hand(new_card,DEFAULT_DRAW_SPEED)
+		Global.opponent_hand.add_card_to_hand(new_card,DEFAULT_DRAW_SPEED)
 		new_card.in_opponent = true

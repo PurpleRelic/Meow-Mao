@@ -10,6 +10,7 @@ var center_screen_x
 func _ready() -> void:
 	hand_y = get_viewport().size.y - 100
 	center_screen_x = get_viewport().size.x / 2
+	Global.player_hand = self
 
 func add_card_to_hand(card,speed):
 	if card not in player_hand:

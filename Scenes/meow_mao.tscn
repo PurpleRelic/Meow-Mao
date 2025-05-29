@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://hv8adwrc5onh" path="res://Images/Timer Foreground.png" id="10_uhhh2"]
 [ext_resource type="Script" uid="uid://68ax108jrfr8" path="res://Scripts/opponent_ai.gd" id="11_oaasd"]
 [ext_resource type="Script" uid="uid://dhfox1dwii2rw" path="res://Scripts/rule_manager.gd" id="13_4bt6l"]
-[ext_resource type="Script" uid="uid://hgtaxte04llj" path="res://Scenes/round_manager.gd" id="15_c4jys"]
+[ext_resource type="Script" uid="uid://bpdhauosvrgc1" path="res://Scripts/round_manager.gd" id="15_c4jys"]
 [ext_resource type="Texture2D" uid="uid://cts317uv0pc25" path="res://Images/Point Chip.png" id="16_4me7m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uhhh2"]

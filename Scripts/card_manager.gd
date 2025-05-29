@@ -6,9 +6,6 @@ const COLLISION_MASK_CARD_SLOT = 2
 var screen_size
 var card_being_dragged
 var is_hovering
-var player_hand_reference
-var deck_reference
-var timer_reference
 
 func connect_card_signals(card):
 	card.connect("hover_on",on_hover_over_card)
@@ -38,10 +35,8 @@ func highlight_card(card, hovered):
 	
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
-	player_hand_reference = $"../Player Hand"
-	$"../Input Manager".connect("left_mouse_released",on_left_click_released)
-	deck_reference = $"../Deck"
-	timer_reference = $"../Timer Manager"
+	Global.input_manager.connect("left_mouse_released",on_left_click_released)
+	Global.card_manager = self
 
 func _process(_delta: float) -> void:
 	if card_being_dragged:
@@ -61,24 +56,24 @@ func end_drag():
 		var tween = get_tree().create_tween()
 		tween.tween_property(card_being_dragged, "position",slot_found.position,0.05)
 		if slot_found.card_in_slot:
-			if !$"../Rule Manager".check_rules(slot_found.card_in_slot,card_being_dragged):
-				$"../Rule Manager".write_failed_rules(slot_found.card_in_slot,card_being_dragged)
-				$"../Round Manager".endround("Opponent")
+			if !Global.rule_manager.check_rules(slot_found.card_in_slot,card_being_dragged):
+				Global.rule_manager.write_failed_rules(slot_found.card_in_slot,card_being_dragged)
+				Global.round_manager.endround("Opponent")
 				rulepass = false
 			slot_found.card_in_slot.free()
 		highlight_card(card_being_dragged,false)
 		slot_found.card_in_slot = card_being_dragged
 		card_being_dragged.in_slot = true
-		player_hand_reference.remove_card_from_hand(card_being_dragged)
+		Global.player_hand.remove_card_from_hand(card_being_dragged)
 		card_being_dragged.z_index = -2
-		deck_reference.draw_card("Player")
+		Global.deck.draw_card("Player")
 		if rulepass:
-			timer_reference.alternate_timers()
-			$"../Input Manager".turn_pass()
-			$"../Opponent AI".opponent_turn()
+			Global.timer_manager.alternate_timers()
+			Global.turn = "Opponent"
+			Global.opponent_ai.opponent_turn()
 	else:
 		card_being_dragged.scale = Vector2(1.1,1.1)
-		player_hand_reference.add_card_to_hand(card_being_dragged,0)
+		Global.player_hand.add_card_to_hand(card_being_dragged,0)
 	card_being_dragged = null
 
 func check_for_card_slot():

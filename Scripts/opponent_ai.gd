@@ -2,20 +2,16 @@ extends Node
 
 var turn_timer
 var play_timer
-var base_turn_speed = 1.0
-var card_slot_reference
-var fail_chance = 0.05
-var opponent_hand_reference
-var rule_manager_reference
+var base_turn_speed = 1.5
+var fail_chance = 0.0
 
 func _ready() -> void:
-	card_slot_reference = $"../Card Slot"
-	opponent_hand_reference = $"../Opponent Hand"
-	rule_manager_reference = $"../Rule Manager"
 	turn_timer = $"Turn Timer"
 	turn_timer.one_shot = true
 	play_timer = $"Play Timer"
 	play_timer.one_shot = true
+	Global.opponent_ai = self
+	base_turn_speed = (1.5 / Global.difficulty) + 0.5
 
 func opponent_turn():
 	# Decide if they will fail or not
@@ -33,7 +29,7 @@ func opponent_turn():
 			play_timer.wait_time = 0.5
 			play_timer.start()
 			await play_timer.timeout
-			$"../Deck".reset_hand("Opponent")
+			Global.deck.reset_hand("Opponent")
 			attempts += 1
 		
 	# Set turn timer
@@ -45,22 +41,22 @@ func opponent_turn():
 	turn_timer.start()
 	await turn_timer.timeout
 	play_card(find_card(rightplay, true))
-	fail_chance += 0.05
+	fail_chance += (0.1 / float(Global.difficulty))
 	turn_timer.wait_time = 0.5
 	turn_timer.start()
 	await turn_timer.timeout
 	
-	$"../Timer Manager".alternate_timers()
-	$"../Input Manager".turn_pass()
+	Global.timer_manager.alternate_timers()
+	Global.turn = "Player"
 
 func find_card(rightplay, override):
 	var playable_cards = []
-	for i in range(0,opponent_hand_reference.opponent_hand.size()):
-		if rule_manager_reference.check_rules(card_slot_reference.card_in_slot,
-								opponent_hand_reference.opponent_hand[i]) == rightplay:
-			playable_cards.insert(0,opponent_hand_reference.opponent_hand[i])
+	for i in range(0,Global.opponent_hand.opponent_hand.size()):
+		if Global.rule_manager.check_rules(Global.card_slot.card_in_slot,
+								Global.opponent_hand.opponent_hand[i]) == rightplay:
+			playable_cards.insert(0,Global.opponent_hand.opponent_hand[i])
 	if playable_cards.size() == 0 and (!rightplay or override):
-		return opponent_hand_reference.opponent_hand[randi_range(0,opponent_hand_reference.opponent_hand.size()-1)]
+		return Global.opponent_hand.opponent_hand[randi_range(0,Global.opponent_hand.opponent_hand.size()-1)]
 	elif playable_cards.size() == 0:
 		return null
 	else:
@@ -70,7 +66,7 @@ func find_card(rightplay, override):
 func play_card(played_card):
 	# Plays the card from hand over 0.5 seconds
 	var tween = get_tree().create_tween()
-	tween.tween_property(played_card, "position",card_slot_reference.position,0.5)
+	tween.tween_property(played_card, "position",Global.card_slot.position,0.5)
 	
 	play_timer.wait_time = 0.3
 	play_timer.start()
@@ -81,14 +77,14 @@ func play_card(played_card):
 	play_timer.wait_time = 0.21
 	play_timer.start()
 	await play_timer.timeout
-	if card_slot_reference.card_in_slot:
-		if !$"../Rule Manager".check_rules(card_slot_reference.card_in_slot,played_card):
-			$"../Rule Manager".write_failed_rules(card_slot_reference.card_in_slot,played_card)
-			$"../Round Manager".endround("Player")
-		card_slot_reference.card_in_slot.free()
-	card_slot_reference.card_in_slot = played_card
-	opponent_hand_reference.remove_card_from_hand(played_card)
+	if Global.card_slot.card_in_slot:
+		if !Global.rule_manager.check_rules(Global.card_slot.card_in_slot,played_card):
+			Global.rule_manager.write_failed_rules(Global.card_slot.card_in_slot,played_card)
+			Global.round_manager.endround("Player")
+		Global.card_slot.card_in_slot.free()
+	Global.card_slot.card_in_slot = played_card
+	Global.opponent_hand.remove_card_from_hand(played_card)
 	played_card.z_index = -2
 	played_card.in_slot = true
 	played_card.in_opponent = false
-	$"../Deck".draw_card("Opponent")
+	Global.deck.draw_card("Opponent")
