@@ -11,7 +11,7 @@ func _ready() -> void:
 	play_timer = $"Play Timer"
 	play_timer.one_shot = true
 	Global.opponent_ai = self
-	base_turn_speed = (1.5 / Global.difficulty) + 0.5
+	base_turn_speed = 1.0 + (0.25 * Global.difficulty)
 
 func opponent_turn():
 	# Decide if they will fail or not

@@ -52,7 +52,7 @@ func newround():
 	$Button.disabled = true
 	$Winner.modulate = Color(255,255,255,0)
 	Global.opponent_ai.fail_chance = 0.0
-	Global.opponent.base_turn_speed += (0.5 / Global.difficulty)
+	Global.opponent_ai.base_turn_speed += (0.25 / float(Global.difficulty))
 	Global.rule_manager.add_rule()
 	Global.timer_manager.reset_timers()
 	Global.round_status = 0
